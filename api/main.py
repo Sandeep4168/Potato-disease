@@ -1,5 +1,6 @@
 from fastapi import FastAPI, File,UploadFile
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
 from io import BytesIO
 from PIL import Image
@@ -10,6 +11,22 @@ import tensorflow as tf
 app = FastAPI()
 MODEL = tf.keras.models.load_model("./models/model")
 class_names = ['Potato___Early_blight', 'Potato___Late_blight', 'Potato___healthy']
+
+
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
 
 @app.get("/ping")
 async def ping():
